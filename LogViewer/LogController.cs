@@ -21,11 +21,15 @@ namespace LogViewer
             return LogRepository.GetAll();
         }
 
-        [Route("log/fieldNames")]
+        [Route("log/metadata")]
         [HttpGet]
-        public IEnumerable<dynamic> GetFieldNames()
+        public dynamic GetMetadata()
         {
-            return LogRepository.GetUniqueFieldNames();
+            return new
+            {
+                FieldNames = LogRepository.GetUniqueFieldNames(),
+                TotalLogEntries = LogRepository.GetAll().Count()
+            }; 
         }
     }
 }

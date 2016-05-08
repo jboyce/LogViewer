@@ -4,52 +4,56 @@
 <head>
     <meta charset="utf-8" />
     <title>Log Viewer</title>
-    <link href="site.css" rel="stylesheet" />
     <link href="bootstrap.min.css" rel="stylesheet" />
+    <link href="site.css" rel="stylesheet" />    
 </head>
 <body>
     <div class="container body-content">
         <div class="row">
             <form class="form">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Leave blank to view all logs" id="search">
+                    <input type="text" class="form-control" id="searchBox">
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" id="advanced"> Use advanced searching
+                        <input type="checkbox" id="advancedSearching"> Use advanced searching
                     </label>
                 </div>
                 <div class="form-group">
-                    <button type="button" onclick="app.getLog()" class="btn btn-default">Search</button>
+                    <button id="searchButton" type="button" class="btn btn-default">Search</button>
                 </div>
             </form>
         </div>
 
-        <div class="row" id="logs">
-        </div>
-    </div>    
-
+        <div id="logs"></div>
 
     <script id="logsTemplate" type="text/x-handlebars-template">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    {{#each fieldNames}}
-                    <th>{{this}}</th>
+        <div class="row">
+            {{countDescription}}
+        </div>
+        <div class="row">
+            <table id="logTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="expandCollapseCol"></th>
+                        <th class="timestampCol" id="timestampHeader">Timestamp&nbsp;<span id="sortIndicator" class="ascendingSortIndicator">&#8227;</span></th>
+                        <th class="levelCol">Level</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each entries}}
+                    <tr>
+                        <td class="expandCollapseCell">{{../expandChar}}</td>
+                        <td>{{{getLogField this "Timestamp"}}}</td>
+                        <td class="{{{levelStyling this "Level"}}}">{{{getLogField this "Level"}}}</td>
+                        <td>{{{getLogField this "Message"}}}</td>
+                    </tr>
                     {{/each}}
-                </tr>
-            </thead>
-            <tbody>
-                {{#each entries}}
-                <tr>
-                    {{#each ../fieldNames}}
-                        <td>{{{getLogField ../this this}}}</td>
-                    {{/each}}
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </script>
+                </tbody>
+            </table>
+        </div>
+</script>
 
     <script src="jquery-1.10.2.min.js"></script>
     <script src="bootstrap.min.js"></script>

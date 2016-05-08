@@ -7,3 +7,27 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.timestampCol {
+    width: 160px;
+}
+
+.levelCol {
+    width: 10px;
+}
+
+.expandCollapseCol {
+    width: 5px;
+}
+
+.ascendingSortIndicator {
+    font-size: 200%;
+    position: absolute;
+    transform: translateY(-10px) rotate(-90deg);
+}
+
+.descendingSortIndicator {
+    font-size: 200%;
+    position: absolute;
+    transform: translateY(-10px) rotate(90deg);
+}

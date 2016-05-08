@@ -15,19 +15,35 @@ namespace LogViewer
             var entry1 = new Dictionary<string, string>
             {
                 { "Level", "Info" },
-                { "Timestamp", DateTime.UtcNow.ToString() },
+                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(2)).ToString() },
                 { "Message", "Some informational message" }
             };
 
             var entry2 = new Dictionary<string, string>
             {
+                { "Level", "Warning" },
+                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).ToString() },
+                { "Message", "Some warning message" }
+            };
+
+            var entry3 = new Dictionary<string, string>
+            {
                 { "Level", "Error" },
-                { "Timestamp", DateTime.UtcNow.ToString() },
+                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)).ToString() },
                 { "Message", "Some error message" }
+            };
+
+            var entry4 = new Dictionary<string, string>
+            {
+                { "Level", "Fatal" },
+                { "Timestamp", DateTime.UtcNow.ToString() },
+                { "Message", "I ate brococli" }
             };
 
             LogRepository.AddEntry(entry1);
             LogRepository.AddEntry(entry2);
+            LogRepository.AddEntry(entry3);
+            LogRepository.AddEntry(entry4);
         }
 
         private static List<dynamic> _allEntries = new List<dynamic>();
