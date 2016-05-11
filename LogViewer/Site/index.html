@@ -43,21 +43,36 @@
                 </thead>
                 <tbody>
                     {{#each entries}}
-                    <tr>
+                    <tr data-entry-index="{{@index}}">
                         <td class="expandCollapseCell">{{../expandChar}}</td>
                         <td>{{{getLogField this "Timestamp"}}}</td>
                         <td class="{{{levelStyling this "Level"}}}">{{{getLogField this "Level"}}}</td>
-                        <td>{{{getLogField this "Message"}}}</td>
-                    </tr>
+                        <td class="mainEntryMessage">{{{getLogField this "Message"}}}</td>
+                    </tr>                    
                     {{/each}}
                 </tbody>
             </table>
         </div>
 </script>
 
-    <script src="jquery-1.10.2.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script src="handlebars.min.js"></script>
-    <script src="app.js"></script>
+<script id="detailsTemplate" type="text/x-handlebars-template">
+    <tr>
+        <td colspan="4">
+            <table class="entryDetailTable">
+                {{#each fieldNames}}
+                <tr>
+                    <td class="detailFieldNameCol"><strong>{{this}}</strong></td>
+                    <td>{{{getLogField ../logEntry this}}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </td>
+    </tr>
+</script>
+
+            <script src="jquery-1.10.2.min.js"></script>
+            <script src="bootstrap.min.js"></script>
+            <script src="handlebars.min.js"></script>
+            <script src="app.js"></script>
 </body>
 </html>

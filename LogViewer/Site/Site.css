@@ -31,3 +31,23 @@
     position: absolute;
     transform: translateY(-10px) rotate(90deg);
 }
+
+.detailFieldNameCol {
+    width: 50px;
+}
+
+.entryDetailTable {
+    margin-left: 20px;
+}
+
+.table .entryDetailTable td {
+    border-top: none;
+    padding: 2px;
+}
+
+.mainEntryMessage {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

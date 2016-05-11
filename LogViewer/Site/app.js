@@ -2,9 +2,11 @@
 
 var app = (function () {
 
-    var template;
+    var logTemplate;
+    var detailsTemplate;
     var useLambdaFilter = false;
     var sortOrder = "ascending";
+    var logEntries;
 
     function init() {
         Handlebars.registerHelper('getLogField', function (entry, field) {
@@ -22,7 +24,8 @@ var app = (function () {
                 return "";
         });
 
-        template = Handlebars.compile($("#logsTemplate").html());
+        logTemplate = Handlebars.compile($("#logsTemplate").html());
+        detailsTemplate = Handlebars.compile($("#detailsTemplate").html());
 
         $("#searchButton").click(getLog);
         $("#advancedSearching").click(setAdvancedSearching);
@@ -51,6 +54,16 @@ var app = (function () {
         }
     }
 
+    function getLogEntryDetailFieldNames(logEntry) {
+        var fieldNames = ["Message"];
+        var allFields = Object.getOwnPropertyNames(logEntry);
+        allFields.forEach(function (name) {
+            if (name != "Message" && name != "Timestamp" && name != "Level")
+                fieldNames.push(name);
+        });
+        return fieldNames;
+    }
+
     function expandCollapseEntry(data) {
         var cell = $(data.target)
         var isExpanded = cell.data("isExpanded");
@@ -58,10 +71,18 @@ var app = (function () {
             //switch to collapsed
             cell.data("isExpanded", false);
             cell.text("»");
+            var detailsRow = cell.parent().next();
+            detailsRow.remove();
         } else {
             //switch to expanded
             cell.data("isExpanded", true);
             cell.text("«");
+            var tr = cell.parent();
+            var logIndex = tr.attr("data-entry-index");
+            var logEntry = logEntries[logIndex];
+            var viewModel = { logEntry: logEntry, fieldNames: getLogEntryDetailFieldNames(logEntry) };
+            var detailshtml = detailsTemplate(viewModel);
+            $(detailshtml).insertAfter(tr);
         }
     }
 
@@ -94,8 +115,9 @@ var app = (function () {
                 if (logResponse[1] != "success" || metadataResponse[1] != "success")
                     return;
 
-                var viewModel = CreateViewModel(logResponse[0], metadataResponse[0]);
-                var html = template(viewModel);
+                logEntries = logResponse[0];
+                var viewModel = CreateViewModel(logEntries, metadataResponse[0]);
+                var html = logTemplate(viewModel);
                 var div = $("#logs");
                 div.empty();
                 div.append(html);

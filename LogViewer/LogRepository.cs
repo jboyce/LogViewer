@@ -16,28 +16,32 @@ namespace LogViewer
             {
                 { "Level", "Info" },
                 { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(2)).ToString() },
-                { "Message", "Some informational message" }
+                { "Message", "Some informational message.  this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value" },
+                { "CustomField1", "custom field1 text" }
             };
 
             var entry2 = new Dictionary<string, string>
             {
                 { "Level", "Warning" },
                 { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).ToString() },
-                { "Message", "Some warning message" }
+                { "Message", "Some warning message" },
+                { "CustomField2", "custom field2 text" }
             };
 
             var entry3 = new Dictionary<string, string>
             {
                 { "Level", "Error" },
                 { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)).ToString() },
-                { "Message", "Some error message" }
+                { "Message", "Some error message" },
+                { "CustomField3", "custom field3 text" }
             };
 
             var entry4 = new Dictionary<string, string>
             {
                 { "Level", "Fatal" },
                 { "Timestamp", DateTime.UtcNow.ToString() },
-                { "Message", "I ate brococli" }
+                { "Message", "I ate broccoli" },
+                { "CustomField4", "custom field4 text" }
             };
 
             LogRepository.AddEntry(entry1);
