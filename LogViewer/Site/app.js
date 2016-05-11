@@ -37,7 +37,7 @@ var app = (function () {
         if (useLambdaFilter)
             $("#searchBox").attr("placeholder", "(LogEntry x) => //your boolean filter expression here");
         else
-            $("#searchBox").attr("placeholder", "Leave blank to view all logs");
+            $("#searchBox").attr("placeholder", "Leave blank to view all log entries");
     }
 
     function changeSortOrder() {
@@ -52,6 +52,8 @@ var app = (function () {
             sortIndicator.removeClass("descendingSortIndicator")
             sortIndicator.addClass("ascendingSortIndicator")
         }
+
+        getLog();
     }
 
     function getLogEntryDetailFieldNames(logEntry) {
@@ -92,7 +94,7 @@ var app = (function () {
     }
 
     function getLogEntries() {
-        return $.get("/log");
+        return $.get("/log?sortOrder=" + sortOrder);
     }
 
     function getMetadata() {
@@ -101,11 +103,14 @@ var app = (function () {
 
     function CreateViewModel(logEntries, metadata)
     {
+        var sortOrderClass = sortOrder == "ascending" ? "ascendingSortIndicator" : "descendingSortIndicator";
+
         return { 
             fieldNames: metadata.FieldNames, 
             entries: logEntries,
             countDescription: "Showing " + logEntries.length + " of " + metadata.TotalLogEntries + " log entries",
-            expandChar: "»"
+            expandChar: "»",
+            sortOrderClass: sortOrderClass
         };
     }
 

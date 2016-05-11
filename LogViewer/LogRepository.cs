@@ -57,7 +57,12 @@ namespace LogViewer
             dynamic expandoEntry = new ExpandoObject();
             var entryAsDictionary = expandoEntry as IDictionary<string, object>;
             foreach (var keyPair in entry)
-                entryAsDictionary.Add(keyPair.Key, keyPair.Value);
+            {
+                object value = keyPair.Value;
+                if (keyPair.Key == "Timestamp")
+                    value = Convert.ToDateTime(value);
+                entryAsDictionary.Add(keyPair.Key, value);
+            }
 
             _allEntries.Add(expandoEntry);
         }

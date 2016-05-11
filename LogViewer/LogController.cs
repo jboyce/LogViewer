@@ -16,9 +16,14 @@ namespace LogViewer
 
         [Route("log")]
         [HttpGet]
-        public IEnumerable<dynamic> Get()
+        public IEnumerable<dynamic> Get(string sortOrder)
         {
-            return LogRepository.GetAll();
+            var allLogEntries = LogRepository.GetAll();
+
+            if (sortOrder == "ascending")
+                return allLogEntries.OrderBy(x => x.Timestamp);
+            else
+                return allLogEntries.OrderByDescending(x => x.Timestamp);
         }
 
         [Route("log/metadata")]
