@@ -9,7 +9,7 @@ namespace LogViewer
 {
     public static class LogRepository
     {
-        //remove this
+        //move this to TestLogGenerator
         static LogRepository()
         {
             var entry1 = new Dictionary<string, string>
@@ -22,7 +22,7 @@ namespace LogViewer
 
             var entry2 = new Dictionary<string, string>
             {
-                { "Level", "Warning" },
+                { "Level", "Warn" },
                 { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).ToString() },
                 { "Message", "Some warning message" },
                 { "CustomField2", "custom field2 text" }
@@ -61,6 +61,8 @@ namespace LogViewer
                 object value = keyPair.Value;
                 if (keyPair.Key == "Timestamp")
                     value = Convert.ToDateTime(value);
+                else if (keyPair.Key == "Level")
+                    value = Enum.Parse(typeof(LogLevel), keyPair.Value, true);
                 entryAsDictionary.Add(keyPair.Key, value);
             }
 
@@ -68,7 +70,7 @@ namespace LogViewer
         }
 
         public static IEnumerable<dynamic> GetAll()
-        {
+        {            
             return _allEntries;
         }
 

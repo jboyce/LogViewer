@@ -3,6 +3,7 @@ using Microsoft.Owin.StaticFiles;
 using Owin;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using Newtonsoft.Json.Converters;
 
 namespace LogViewer
 {
@@ -20,15 +21,9 @@ namespace LogViewer
             var config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
 
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
-
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
-
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
             app.UseWebApi(config);
         }
     }

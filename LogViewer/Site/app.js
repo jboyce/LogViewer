@@ -16,7 +16,7 @@ var app = (function () {
         Handlebars.registerHelper('levelStyling', function (entry, levelField) {
             var level = entry[levelField];
 
-            if (level == "Warning")
+            if (level == "Warn")
                 return "alert alert-warning";
             else if (level == "Error" || level == "Fatal")
                 return "alert alert-danger";
@@ -29,6 +29,13 @@ var app = (function () {
 
         $("#searchButton").click(getLog);
         $("#advancedSearching").click(setAdvancedSearching);
+        $("#searchBox").keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                getLog();
+                return false;
+            }
+        });
         setAdvancedSearching();
     }
 
@@ -94,7 +101,11 @@ var app = (function () {
     }
 
     function getLogEntries() {
-        return $.get("/log?sortOrder=" + sortOrder);
+        var searchText = $("#searchBox").val();
+        var url = "/log?sortOrder=" + sortOrder 
+            + "&useLambdaSearch=" + useLambdaFilter 
+            + "&searchText=" + encodeURIComponent(searchText);
+        return $.get(url);
     }
 
     function getMetadata() {
