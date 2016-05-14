@@ -54,8 +54,7 @@ namespace LogViewer
 
         public static void AddEntry(Dictionary<string, string> entry)
         {
-            dynamic expandoEntry = new ExpandoObject();
-            var entryAsDictionary = expandoEntry as IDictionary<string, object>;
+            dynamic logEntry = new LogEntry();
             foreach (var keyPair in entry)
             {
                 object value = keyPair.Value;
@@ -63,12 +62,12 @@ namespace LogViewer
                     value = Convert.ToDateTime(value);
                 else if (keyPair.Key == "Level")
                     value = Enum.Parse(typeof(LogLevel), keyPair.Value, true);
-                entryAsDictionary.Add(keyPair.Key, value);
+                (logEntry as IFieldAccessable).AddField(keyPair.Key, value);
             }
 
             lock(_lock)
             {
-                _allEntries.Add(expandoEntry);
+                _allEntries.Add(logEntry);
             }
         }
 
@@ -84,7 +83,7 @@ namespace LogViewer
         {
             lock (_lock)
             {
-                var uniqueFields = _allEntries.Cast<IDictionary<string, object>>().SelectMany(e => e.Keys).Distinct();
+                var uniqueFields = _allEntries.Cast<IFieldAccessable>().SelectMany(e => e.GetFieldNames()).Distinct();
                 return uniqueFields;
             }
         }

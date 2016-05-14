@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LogController.cs" />
+    <Compile Include="LogEntry.cs" />
     <Compile Include="LogFilter.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogRepository.cs" />
