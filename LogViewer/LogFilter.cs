@@ -9,9 +9,10 @@ namespace LogViewer
     {
         public static Func<dynamic, bool> CreateFilter(string searchString, bool searchStringIsLambda)
         {
-            string scriptText = searchStringIsLambda
-                ? searchString
-                : string.Format("x.Message.Contains(\"{0}\")", searchString);
+            if (!searchStringIsLambda)
+                return CreateSimpleFilter(searchString);
+
+            string scriptText = searchString;
 
             Assembly microsoftCSharpAssembly = typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly;
             Assembly thisAssembly = Assembly.GetExecutingAssembly();
@@ -23,7 +24,12 @@ namespace LogViewer
 
             Func<dynamic, bool> filter = logEntry => runner(new ScriptGlobals { x = logEntry }).Result;
             return filter;
-        }        
+        }   
+        
+        private static Func<dynamic, bool> CreateSimpleFilter(string searchString)
+        {
+            return (dynamic x) => x.Message.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) > -1;
+        }     
     }
 
     public class ScriptGlobals
