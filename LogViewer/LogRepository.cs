@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LogViewer
 {
     public static class LogRepository
     {
+        private static readonly object _lock = new object();
+
         //move this to TestLogGenerator
         static LogRepository()
         {
@@ -66,18 +66,27 @@ namespace LogViewer
                 entryAsDictionary.Add(keyPair.Key, value);
             }
 
-            _allEntries.Add(expandoEntry);
+            lock(_lock)
+            {
+                _allEntries.Add(expandoEntry);
+            }
         }
 
         public static IEnumerable<dynamic> GetAll()
-        {            
-            return _allEntries;
+        {
+            lock (_lock)
+            {
+                return _allEntries.ToList();
+            }
         }
 
         public static IEnumerable<string> GetUniqueFieldNames()
         {
-            var uniqueFields = _allEntries.Cast<IDictionary<string, object>>().SelectMany(e => e.Keys).Distinct();
-            return uniqueFields;
+            lock (_lock)
+            {
+                var uniqueFields = _allEntries.Cast<IDictionary<string, object>>().SelectMany(e => e.Keys).Distinct();
+                return uniqueFields;
+            }
         }
 
         public static string GetFieldValue(dynamic entry, string fieldName)
@@ -86,6 +95,14 @@ namespace LogViewer
             if ((entry as IDictionary<string, object>).TryGetValue(fieldName, out value))
                 return value.ToString();
             return null;
+        }
+
+        public static void Clear()
+        {
+            lock(_lock)
+            {
+                _allEntries.Clear();
+            }
         }
     }
 }

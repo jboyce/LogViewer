@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
@@ -16,23 +18,40 @@ namespace LogViewer
 
         [Route("log")]
         [HttpGet]
-        public IEnumerable<dynamic> Get(string sortOrder, string searchText, bool useLambdaSearch)
+        public IHttpActionResult Get(string sortOrder, string searchText, bool useLambdaSearch)
         {
-            var allLogEntries = LogRepository.GetAll();
-
-            IEnumerable<dynamic> filteredEntries;
-            if (!string.IsNullOrEmpty(searchText))
+            try
             {
-                var filter = LogFilter.CreateFilter(searchText, useLambdaSearch);
-                filteredEntries = allLogEntries.Where(filter);
-            }
-            else
-                filteredEntries = allLogEntries;
+                var allLogEntries = LogRepository.GetAll();
 
-            if (sortOrder == "ascending")
-                return filteredEntries.OrderBy(x => x.Timestamp);
-            else
-                return filteredEntries.OrderByDescending(x => x.Timestamp);
+                IEnumerable<dynamic> filteredEntries;
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    var filter = LogFilter.CreateFilter(searchText, useLambdaSearch);
+                    filteredEntries = allLogEntries.Where(filter);
+                }
+                else
+                    filteredEntries = allLogEntries;
+
+                if (sortOrder == "ascending")
+                    return Ok(filteredEntries.OrderBy(x => x.Timestamp));
+                else
+                    return Ok(filteredEntries.OrderByDescending(x => x.Timestamp));
+                
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                string message = "An error occurred retrieving the log.  " + ex.Message;
+                return Content(HttpStatusCode.InternalServerError, message);
+            }
+        }
+
+        [Route("log/clear")]
+        [HttpPost]
+        public void Clear()
+        {
+            LogRepository.Clear();
         }
 
         [Route("log/metadata")]

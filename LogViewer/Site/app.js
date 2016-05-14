@@ -24,10 +24,16 @@ var app = (function () {
                 return "";
         });
 
+        Handlebars.registerHelper('getFormattedTimestamp', function (entry) {
+            var timestamp = new Date(entry.Timestamp);
+            return timestamp.toISOString();
+        });
+
         logTemplate = Handlebars.compile($("#logsTemplate").html());
         detailsTemplate = Handlebars.compile($("#detailsTemplate").html());
 
         $("#searchButton").click(getLog);
+        $("#clearButton").click(clearLog);
         $("#advancedSearching").click(setAdvancedSearching);
         $("#searchBox").keydown(function (event) {
             if (event.keyCode == 13) {
@@ -128,20 +134,42 @@ var app = (function () {
     function getLog() {
         $.when(getLogEntries(), getMetadata())
             .done(function (logResponse, metadataResponse) {
-                if (logResponse[1] != "success" || metadataResponse[1] != "success")
-                    return;
+                var logTableDiv = $("#logs");
+                logTableDiv.empty();
+                var errorMessage = $("#errorMessage");
+                errorMessage.text("");
+                errorMessage.toggleClass("hidden", true);
 
-                logEntries = logResponse[0];
-                var viewModel = CreateViewModel(logEntries, metadataResponse[0]);
-                var html = logTemplate(viewModel);
-                var div = $("#logs");
-                div.empty();
-                div.append(html);
-                hookupTemplateContentEventHandlers();
+                if (logResponse[1] != "success" || metadataResponse[1] != "success") {
+
+                }
+                else {
+                    logEntries = logResponse[0];
+                    var viewModel = CreateViewModel(logEntries, metadataResponse[0]);
+                    var html = logTemplate(viewModel);
+                    logTableDiv.append(html);
+                    hookupTemplateContentEventHandlers();
+                }
+            })
+            .fail(function (error) {
+                var logTableDiv = $("#logs");
+                logTableDiv.empty();
+
+                var errorMessage = $("#errorMessage");
+                errorMessage.text(error.responseText);
+                errorMessage.toggleClass("hidden", false);
             });
     }
 
-    init();
+    function clearLog() {
+        $.post("/log/clear", function () {
+            getLog();
+        });
+    }
 
+    $(document).ready(function () {
+        init();
+    });
+    
     return { getLog: getLog };
 })();

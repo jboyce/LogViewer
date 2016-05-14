@@ -9,10 +9,10 @@ namespace LogViewer
     {
         public static Func<dynamic, bool> CreateFilter(string searchString, bool searchStringIsLambda)
         {
-            string scriptText = searchStringIsLambda 
+            string scriptText = searchStringIsLambda
                 ? searchString
                 : string.Format("x.Message.Contains(\"{0}\")", searchString);
-            
+
             Assembly microsoftCSharpAssembly = typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly;
             Assembly thisAssembly = Assembly.GetExecutingAssembly();
             ScriptOptions options = ScriptOptions.Default
