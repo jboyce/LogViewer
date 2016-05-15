@@ -9,46 +9,45 @@ namespace LogViewer
     {
         private static readonly object _lock = new object();
 
-        //move this to TestLogGenerator
-        static LogRepository()
-        {
-            var entry1 = new Dictionary<string, string>
-            {
-                { "Level", "Info" },
-                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(2)).ToString() },
-                { "Message", "Some informational message.  this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value" },
-                { "CustomField1", "custom field1 text" }
-            };
+        //static LogRepository()
+        //{
+        //    var entry1 = new Dictionary<string, string>
+        //    {
+        //        { "Level", "Info" },
+        //        { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(2)).ToString() },
+        //        { "Message", "Some informational message.  this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value. fieldvalue1. this is a really reallly really long value" },
+        //        { "CustomField1", "custom field1 text" }
+        //    };
 
-            var entry2 = new Dictionary<string, string>
-            {
-                { "Level", "Warn" },
-                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).ToString() },
-                { "Message", "Some warning message" },
-                { "CustomField2", "custom field2 text" }
-            };
+        //    var entry2 = new Dictionary<string, string>
+        //    {
+        //        { "Level", "Warn" },
+        //        { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).ToString() },
+        //        { "Message", "Some warning message" },
+        //        { "CustomField2", "custom field2 text" }
+        //    };
 
-            var entry3 = new Dictionary<string, string>
-            {
-                { "Level", "Error" },
-                { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)).ToString() },
-                { "Message", "Some error message" },
-                { "CustomField3", "custom field3 text" }
-            };
+        //    var entry3 = new Dictionary<string, string>
+        //    {
+        //        { "Level", "Error" },
+        //        { "Timestamp", DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)).ToString() },
+        //        { "Message", "Some error message" },
+        //        { "CustomField3", "custom field3 text" }
+        //    };
 
-            var entry4 = new Dictionary<string, string>
-            {
-                { "Level", "Fatal" },
-                { "Timestamp", DateTime.UtcNow.ToString() },
-                { "Message", "I ate broccoli" },
-                { "CustomField4", "custom field4 text" }
-            };
+        //    var entry4 = new Dictionary<string, string>
+        //    {
+        //        { "Level", "Fatal" },
+        //        { "Timestamp", DateTime.UtcNow.ToString() },
+        //        { "Message", "I ate broccoli" },
+        //        { "CustomField4", "custom field4 text" }
+        //    };
 
-            LogRepository.AddEntry(entry1);
-            LogRepository.AddEntry(entry2);
-            LogRepository.AddEntry(entry3);
-            LogRepository.AddEntry(entry4);
-        }
+        //    LogRepository.AddEntry(entry1);
+        //    LogRepository.AddEntry(entry2);
+        //    LogRepository.AddEntry(entry3);
+        //    LogRepository.AddEntry(entry4);
+        //}
 
         private static List<dynamic> _allEntries = new List<dynamic>();
 
