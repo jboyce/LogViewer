@@ -11,7 +11,8 @@ namespace LogViewer
     {
         public void Configuration(IAppBuilder app)
         {
-            var fileSystem = new PhysicalFileSystem("..\\..\\Site");
+            //var fileSystem = new PhysicalFileSystem("..\\..\\Site");
+            var fileSystem = new EmbeddedResourceFileSystem("LogViewer.Site");
             var options = new FileServerOptions
             {
                 FileSystem = fileSystem
