@@ -56,6 +56,9 @@ namespace LogViewer
             dynamic logEntry = new LogEntry();
             foreach (var keyPair in entry)
             {
+                if ((keyPair.Value == string.Empty || keyPair.Value == null) && keyPair.Key != "Message")
+                    continue;
+
                 object value = keyPair.Value;
                 if (keyPair.Key == "Timestamp")
                     value = Convert.ToDateTime(value);
